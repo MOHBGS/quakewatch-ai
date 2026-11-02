@@ -19,7 +19,7 @@ charts, and CSV export.
 | AWS map | Amazon Location Service map and map/referrer-restricted, expiring key are included |
 | AWS backend/hosting | CDK v2 definitions and a verified deployment script are included; not deployed without AWS credentials and approval |
 | Public application URL | Not available until an AWS deployment is completed and checked |
-| Public GitHub URL | Not published until authenticated repository creation/push is completed |
+| Public GitHub URL | [Public repository](https://github.com/MOHBGS/quakewatch-ai) — source code and documentation published |
 | Screenshots | No screenshots are claimed; see [screenshots/README.md](./screenshots/README.md) |
 | Hackathon package | [Submission description, data notes, and demo script](./docs/hackathon-submission.md) |
 
