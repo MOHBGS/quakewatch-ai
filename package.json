@@ -1,0 +1,23 @@
+{
+  "name": "quakewatch-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An AWS-powered real-time earthquake intelligence dashboard using the USGS catalog.",
+  "workspaces": [
+    "frontend",
+    "infrastructure"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "test": "npm run test:frontend && npm run test:backend && npm run test:infrastructure",
+    "test:frontend": "npm run test --workspace frontend -- --run",
+    "test:backend": "python -m unittest discover -s backend/tests -v",
+    "test:infrastructure": "npm run build --workspace infrastructure && npm run test --workspace infrastructure && npm run synth --workspace infrastructure",
+    "synth": "npm run synth --workspace infrastructure"
+  },
+  "engines": {
+    "node": ">=22.12",
+    "npm": ">=10"
+  }
+}
