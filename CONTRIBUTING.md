@@ -6,7 +6,7 @@ could be mistaken for real observations.
 
 ## Development setup
 
-1. Install Node.js 20 or later and Python 3.12 or later.
+1. Install Node.js 22.12 or later, npm 10 or later, and Python 3.12 or later.
 2. Copy `.env.example` to `.env.local` if you want to configure the optional
    AWS map or API.
 3. Run `npm ci`, then `npm run dev`.

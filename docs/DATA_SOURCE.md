@@ -1,7 +1,9 @@
 # Data source and normalization
 
 QuakeWatch AI uses the [USGS Earthquake Catalog FDSN Event Web Service](https://earthquake.usgs.gov/fdsnws/event/1/).
-The app does not generate, simulate, or backfill earthquake records.
+The app does not generate, simulate, or backfill earthquake records. The
+official feed is the source of every displayed event in local and deployed
+modes.
 
 ## Queries
 

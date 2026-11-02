@@ -42,10 +42,11 @@ stack does not create a billing budget.
   escapes quoting and formula-leading text.
 - No request-body upload, login, private data, or cross-account role is added.
 - `npm audit --omit=dev` reports no production dependency advisories. The full
-  audit still reports one moderate minimatch advisory bundled in the latest
-  AWS CDK release; npm reports no upstream fix. CDK is local deployment/test
-  tooling and is not shipped with the frontend or Lambda. Recheck the audit
-  and update CDK when a fixed release is available.
+  audit reports two moderate findings in the AWS CDK/minimatch development
+  dependency chain, with no npm-reported fix available at the time checked.
+  CDK is local deployment/test tooling and is not shipped with the frontend
+  or Lambda. Recheck the audit and update CDK when a fixed release is
+  available.
 
 Enable AWS account-level monitoring and review Lambda/API Gateway logs for
 unexpected volume. Do not add a credential, broaden a Location key, or create

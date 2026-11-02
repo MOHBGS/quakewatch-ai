@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   applyFilters,
   buildCsv,
+  defaultFilters,
   getDailyCounts,
   getMagnitudeCounts,
   isValidCoordinate,
@@ -65,6 +66,23 @@ const allFilters: Filters = {
   endDate: "2026-11-30",
   search: "",
 };
+
+describe("default filters", () => {
+  it("restores the default ranges and dates while retaining the selected region", () => {
+    expect(
+      defaultFilters("global", new Date("2026-11-03T00:15:00.000Z")),
+    ).toEqual({
+      region: "global",
+      minMagnitude: 0,
+      maxMagnitude: 9.5,
+      minDepth: 0,
+      maxDepth: 700,
+      startDate: "2026-10-05",
+      endDate: "2026-11-03",
+      search: "",
+    });
+  });
+});
 
 describe("USGS GeoJSON validation and normalization", () => {
   it("normalizes real GeoJSON points and deduplicates event identifiers", () => {

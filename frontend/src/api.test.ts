@@ -3,11 +3,12 @@ import { fetchEarthquakes } from "./api";
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.useRealTimers();
 });
 
 const samplePayload = {
   type: "FeatureCollection",
-  metadata: { generated: 1_798_500_000_000 },
+  metadata: { generated: Date.UTC(2026, 10, 1, 10) },
   features: [
     {
       type: "Feature",
@@ -44,6 +45,9 @@ describe("live earthquake API adapter", () => {
     expect(data.events).toHaveLength(1);
     expect(data.events[0]?.magnitude).toBe(4.4);
     expect(data.source).toContain("USGS live query");
+    expect(data.retrievedAt).toBe(
+      new Date(samplePayload.metadata.generated).toISOString(),
+    );
   });
 
   it("fetches events from API Gateway when a public API base URL is configured", async () => {
@@ -91,15 +95,26 @@ describe("live earthquake API adapter", () => {
   });
 
   it("honors global selection and the caller's AbortSignal", async () => {
-    const fetch = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify(samplePayload), { status: 200 }),
+    const fetch = vi.fn(
+      (_url: string, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener(
+            "abort",
+            () => reject(new DOMException("Aborted", "AbortError")),
+            { once: true },
+          );
+        }),
     );
     vi.stubGlobal("fetch", fetch);
     const controller = new AbortController();
-    await fetchEarthquakes("global", "", controller.signal);
+    const request = fetchEarthquakes("global", "", controller.signal);
     const url = new URL(fetch.mock.calls[0]?.[0] as string);
     expect(url.searchParams.has("minlatitude")).toBe(false);
-    expect(fetch.mock.calls[0]?.[1].signal).toBe(controller.signal);
+    const requestSignal = fetch.mock.calls[0]?.[1]?.signal;
+    expect(requestSignal).not.toBe(controller.signal);
+    controller.abort();
+    expect(requestSignal?.aborted).toBe(true);
+    await expect(request).rejects.toMatchObject({ name: "AbortError" });
   });
 
   it("reports HTTP errors rather than replacing failed data with sample events", async () => {
@@ -118,5 +133,27 @@ describe("live earthquake API adapter", () => {
       ),
     );
     await expect(fetchEarthquakes("india", "")).rejects.toThrow(/invalid JSON/i);
+  });
+
+  it("times out stalled live catalog requests", async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        (_url: string, init?: RequestInit) =>
+          new Promise<Response>((_resolve, reject) => {
+            init?.signal?.addEventListener(
+              "abort",
+              () => reject(new DOMException("Aborted", "AbortError")),
+              { once: true },
+            );
+          }),
+      ),
+    );
+
+    const request = fetchEarthquakes("india", "");
+    const rejection = expect(request).rejects.toThrow(/timed out/i);
+    await vi.advanceTimersByTimeAsync(10_000);
+    await rejection;
   });
 });
