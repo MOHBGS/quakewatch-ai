@@ -1,0 +1,21 @@
+{
+  "name": "@quakewatch/infrastructure",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit",
+    "synth": "cdk synth --quiet",
+    "deploy": "cdk deploy QuakeWatchStack",
+    "diff": "cdk diff QuakeWatchStack",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "aws-cdk-lib": "^2.275.0",
+    "constructs": "^10.4.2",
+    "aws-cdk": "^2.1030.0",
+    "@types/node": "^24.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}
