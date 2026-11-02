@@ -1,0 +1,34 @@
+# Environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# JavaScript
+node_modules/
+frontend/dist/
+infrastructure/cdk.out/
+coverage/
+.vite/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Local editor and operating-system files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# Generated test and deployment output
+*.tsbuildinfo
+*.coverage
+cdk-*.json
