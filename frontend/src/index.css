@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  background: #07111b;
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 42% -20%, rgba(32, 90, 104, 0.14), transparent 52%),
+    #07111b;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(103, 232, 249, 0.86);
+  outline-offset: 3px;
+}
+
+.panel {
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 14px;
+  background:
+    linear-gradient(130deg, rgba(22, 38, 53, 0.97), rgba(15, 29, 42, 0.97));
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.12);
+}
+
+.icon-button {
+  display: inline-flex;
+  min-height: 35px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #a4b4c5;
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.icon-button:hover:not(:disabled) {
+  border-color: rgba(103, 232, 249, 0.26);
+  background: rgba(103, 232, 249, 0.05);
+  color: #a5f3fc;
+}
+
+.filter-input {
+  width: 100%;
+  min-height: 37px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 8px;
+  padding: 0 10px;
+  background: rgba(3, 10, 17, 0.35);
+  color: #dce5ed;
+  color-scheme: dark;
+  font-size: 11px;
+  transition: border-color 150ms ease;
+}
+
+.filter-input::placeholder {
+  color: #667789;
+}
+
+.filter-input:focus {
+  border-color: rgba(103, 232, 249, 0.4);
+  outline: none;
+}
+
+.filter-input::-webkit-calendar-picker-indicator {
+  opacity: 0.65;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.cluster-dot {
+  background: #e99042;
+  box-shadow: 0 0 0 3px rgba(233, 144, 66, 0.2);
+}
+
+.pulse-dot {
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(52, 211, 153, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+  }
+}
+
+.maplibregl-map {
+  border-radius: 11px;
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.maplibregl-ctrl-group {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  border-radius: 9px !important;
+  background: rgba(7, 17, 27, 0.94) !important;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+.maplibregl-ctrl-group button {
+  width: 29px !important;
+  height: 29px !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+.maplibregl-ctrl-group button span {
+  filter: invert(0.9);
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 8px !important;
+}
+
+.maplibregl-popup-content {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px !important;
+  padding: 12px !important;
+  background: #13202d !important;
+  color: #e5edf6 !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: #13202d !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: #13202d !important;
+}
+
+.maplibregl-popup-close-button {
+  right: 5px !important;
+  top: 4px !important;
+  color: #9fb0c2 !important;
+  font-size: 16px !important;
+}
+
+.quake-popup strong {
+  display: block;
+  margin-right: 14px;
+  color: #f0f7ff;
+  font-size: 11px;
+}
+
+.quake-popup p {
+  margin: 7px 0;
+  color: #aab8c7;
+  font-size: 10px;
+}
+
+.quake-popup a {
+  color: #67e8f9;
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.quake-popup a:hover {
+  text-decoration: underline;
+}
+
+::selection {
+  background: rgba(103, 232, 249, 0.2);
+  color: white;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
