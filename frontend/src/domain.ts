@@ -34,6 +34,26 @@ export interface Filters {
   search: string;
 }
 
+export function defaultFilters(
+  region: Region = "india",
+  now: Date = new Date(),
+): Filters {
+  const endDate = now.toISOString().slice(0, 10);
+  const startDate = new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+  return {
+    region,
+    minMagnitude: 0,
+    maxMagnitude: 9.5,
+    minDepth: 0,
+    maxDepth: 700,
+    startDate,
+    endDate,
+    search: "",
+  };
+}
+
 export const INDIA_BOUNDS = {
   south: 5,
   north: 38,

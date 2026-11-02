@@ -29,6 +29,7 @@ import { fetchEarthquakes } from "./api";
 import {
   applyFilters,
   buildCsv,
+  defaultFilters,
   getDailyCounts,
   getMagnitudeCounts,
   type Dataset,
@@ -40,14 +41,9 @@ import {
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim() ?? "";
 const POLL_INTERVAL_MS = 60_000;
 
-function utcDate(daysAgo = 0): string {
-  return new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 10);
-}
-
 function initialFilters(): Filters {
   const query = new URLSearchParams(window.location.search);
+  const defaults = defaultFilters();
   const readNumber = (name: string, fallback: number) => {
     const raw = query.get(name);
     if (raw === null || raw.trim() === "") return fallback;
@@ -55,13 +51,14 @@ function initialFilters(): Filters {
     return Number.isFinite(parsed) ? parsed : fallback;
   };
   return {
-    region: query.get("region") === "global" ? "global" : "india",
-    minMagnitude: readNumber("minMag", 0),
-    maxMagnitude: readNumber("maxMag", 9.5),
-    minDepth: readNumber("minDepth", 0),
-    maxDepth: readNumber("maxDepth", 700),
-    startDate: query.get("start") ?? utcDate(29),
-    endDate: query.get("end") ?? utcDate(),
+    ...defaults,
+    region: query.get("region") === "global" ? "global" : defaults.region,
+    minMagnitude: readNumber("minMag", defaults.minMagnitude),
+    maxMagnitude: readNumber("maxMag", defaults.maxMagnitude),
+    minDepth: readNumber("minDepth", defaults.minDepth),
+    maxDepth: readNumber("maxDepth", defaults.maxDepth),
+    startDate: query.get("start") ?? defaults.startDate,
+    endDate: query.get("end") ?? defaults.endDate,
     search: query.get("q") ?? "",
   };
 }
@@ -250,10 +247,7 @@ export default function App() {
     setFilters((current) => ({ ...current, [key]: value }));
   };
   const resetFilters = () => {
-    setFilters({
-      ...initialFilters(),
-      region: filters.region,
-    });
+    setFilters(defaultFilters(filters.region));
   };
 
   return (
@@ -494,7 +488,7 @@ export default function App() {
                       className="filter-input"
                       value={filters.endDate}
                       min={filters.startDate || undefined}
-                      max={utcDate()}
+                      max={defaultFilters().endDate}
                       onChange={(event) => setFilter("endDate", event.target.value)}
                     />
                   </label>
