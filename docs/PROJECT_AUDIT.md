@@ -56,8 +56,9 @@ events before filtering, and the heatmap control was initially off.
 
 ## Deployment and publication status
 
-- The source repository is public. This work is on a feature branch; it is not
-  a published GitHub branch or pull request until push/PR checks are verified.
+- The source repository is public and this feature branch is published. Verify
+  the pull request and GitHub Actions status in the repository; this report
+  does not imply a merge or successful remote workflow.
 - The CDK stack has local synthesis coverage, but no AWS stack, API endpoint,
   Amazon Location map, CloudFront distribution, or public application URL has
   been verified in this environment.
