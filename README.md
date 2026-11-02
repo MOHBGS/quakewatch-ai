@@ -16,12 +16,15 @@ charts, and CSV export.
 |---|---|
 | Live catalog | Official USGS FDSN API is queried with bounded timeouts; no sample events are included |
 | Local map | A clearly labelled OpenStreetMap preview is used during Vite development |
-| AWS map | Amazon Location Service map and map/referrer-restricted, expiring key are included |
+| AWS map | CDK defines an Amazon Location Service map and restricted, expiring key; deployment is not verified |
 | AWS backend/hosting | CDK v2 definitions and a verified deployment script are included; not deployed without AWS credentials and approval |
 | Public application URL | Not available until an AWS deployment is completed and checked |
 | Public GitHub URL | [Public repository](https://github.com/MOHBGS/quakewatch-ai) — source code and documentation published |
 | Screenshots | No screenshots are claimed; see [screenshots/README.md](./screenshots/README.md) |
-| Hackathon package | [Submission description, data notes, and demo script](./docs/hackathon-submission.md) |
+| Repository audit | [Verified features, findings, and deployment limitations](./docs/PROJECT_AUDIT.md) |
+| Architecture | [AWS/local system design and data flow](./docs/ARCHITECTURE.md) |
+| Hackathon package | [Submission draft](./docs/HACKATHON_SUBMISSION.md), [data source](./docs/DATA_SOURCE.md), and [demo script](./docs/DEMO_SCRIPT.md) |
+| Deployment report | [AWS access and deployment status](./docs/DEPLOYMENT_REPORT.md) |
 
 ## Problem statement
 
@@ -66,7 +69,7 @@ check succeed.
 | Area | Technologies |
 |---|---|
 | Frontend | React, TypeScript, Vite, Tailwind CSS, Recharts, MapLibre GL JS |
-| Geospatial | Amazon Location Service maps, clusters, event layers, and heatmap; local OpenStreetMap fallback |
+| Geospatial | Amazon Location Service (CDK-defined, not deployed), MapLibre GL JS; local OpenStreetMap preview |
 | Backend | Python 3.12 AWS Lambda, Python standard library |
 | APIs and storage | Amazon API Gateway, private Amazon S3 |
 | Scheduling | Amazon EventBridge |
@@ -104,7 +107,7 @@ flowchart LR
 
 In the local preview, the browser queries USGS directly and uses an explicitly
 labelled OpenStreetMap base layer; this is **not represented as an AWS-hosted
-map or deployment**. See [data source and normalization](./docs/data-source.md).
+map or deployment**. See [data source and normalization](./docs/DATA_SOURCE.md).
 
 ## Requirements
 
@@ -242,36 +245,12 @@ and accept only two region names:
 ### `GET /events?region=india`
 
 Returns normalized event objects sourced from a fresh scheduled S3 snapshot
-or a live USGS query:
-
-```json
-{
-  "events": [
-    {
-      "id": "usgs-event-id",
-      "magnitude": 3.2,
-      "magnitude_type": "mb",
-      "place": "20 km from a catalog location",
-      "longitude": 77.2,
-      "latitude": 28.6,
-      "depth_km": 10.0,
-      "time_ms": 1793856000000,
-      "time": "2026-11-05T00:00:00.000Z",
-      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usgs-event-id",
-      "significance": 152
-    }
-  ],
-  "retrieved_at": "2026-11-05T00:15:00.000Z",
-  "data_source": "USGS catalog · scheduled S3 snapshot",
-  "stale": false,
-  "truncated": false,
-  "region": "india"
-}
-```
-
-Records above illustrate the **response shape only**; they are not live event
-data. See [USGS query semantics](./docs/data-source.md). The real API response
-is derived from USGS and may contain different events or an empty list.
+or a live USGS query. Each event preserves the USGS ID, magnitude and type,
+place, longitude, latitude, known depth, source timestamp, official URL, and
+significance when present. An empty `events` array means no catalog records
+matched; the application does not use fictional example events. The response
+also includes retrieval time, source, stale/truncated flags, and region. See
+[USGS query semantics](./docs/DATA_SOURCE.md).
 
 `region` may be `india` or `global`. India uses the documented bounding
 coordinates. The global query is capped at the 2,000 newest events in its
@@ -350,10 +329,11 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). CI runs on GitHub Actions at
 
 ## Hackathon submission and demo script
 
-The complete prepared description, dataset/services rationale, checklist, and
-sub-three-minute narration are in
-[docs/hackathon-submission.md](./docs/hackathon-submission.md). Repository,
-live-app, and video fields remain unpublished until their URLs are verified.
+The prepared submission is in
+[docs/HACKATHON_SUBMISSION.md](./docs/HACKATHON_SUBMISSION.md); the timed
+narration is in [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md). The repository
+is public. Live-app and video fields remain unavailable until their URLs are
+verified; no post has been submitted.
 
 ## License
 
