@@ -1,0 +1,44 @@
+name: QuakeWatch CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Test, build, and synthesize
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Check Python syntax
+        run: python -m compileall -q backend
+
+      - name: Run frontend, backend, and infrastructure tests
+        run: npm test
+
+      - name: Build frontend for production
+        run: npm run build
+
+      - name: Check whitespace errors
+        run: git diff --check
